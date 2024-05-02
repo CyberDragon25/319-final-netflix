@@ -7,6 +7,7 @@ import Player from "./pages/Player";
 import Movies from "./pages/Movies";
 import TVShows from "./pages/TVShows";
 import About from "./pages/About";
+import AccountInfo from "./pages/AccountInfo";
 import {UserIDProvider } from "./components/UserIDContext";
 
 
@@ -21,6 +22,7 @@ export default function App() {
           <Route exact path="/movies" element={<Movies />} />
           <Route exact path="/tv" element={<TVShows />} />
           <Route exact path="/about" element={<About />} />
+          <Route exact path="/accountInfo" element={<AccountInfo />} />
           <Route exact path="/" element={<Netflix />} />
         </Routes>
       </BrowserRouter>
