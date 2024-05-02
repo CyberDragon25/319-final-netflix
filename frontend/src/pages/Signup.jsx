@@ -11,7 +11,7 @@ import { firebaseAuth } from "../utils/firebase-config";
 import UserIDContext from "../components/UserIDContext";
 
 function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const { userID, setUserID } = useContext(UserIDContext);
   const [formValues, setFormValues] = useState({
     email: "",
@@ -97,7 +97,7 @@ function Signup() {
               <button onClick={() => setShowPassword(true)}>Get Started</button>
             )}
           </div>
-          {showPassword && <button onClick={handleSignIn}>Log In</button>}
+          {showPassword && <button onClick={handleSignIn}>Create Account</button>}
         </div>
       </div>
     </Container>
