@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoPlayCircleSharp } from "react-icons/io5";
@@ -12,18 +12,21 @@ import { firebaseAuth } from "../utils/firebase-config";
 import { useDispatch } from "react-redux";
 import { removeMovieFromLiked } from "../store";
 import video from "../assets/video.mp4";
+import UserIDContext from "./UserIDContext";
 
 export default React.memo(function Card({ index, movieData, isLiked = false }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [email, setEmail] = useState(undefined);
+  const { userID, setUserID } = useContext(UserIDContext);
 
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    if (currentUser) {
-      setEmail(currentUser.email);
-    } else navigate("/login");
-  });
+  useEffect(() => {
+    if (userID === null) {
+      navigate("/login");
+    }
+  }, [userID, navigate]); 
+
 
   const addToList = async () => {
     try {

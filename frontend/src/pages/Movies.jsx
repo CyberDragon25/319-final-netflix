@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext  } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import CardSlider from "../components/CardSlider";
@@ -10,12 +10,14 @@ import { fetchMovies, getGenres } from "../store";
 import SelectGenre from "../components/SelectGenre";
 import Slider from "../components/Slider";
 import NotAvailable from "../components/NotAvailable";
+import UserIDContext from "../components/UserIDContext";
 
 function MoviePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const movies = useSelector((state) => state.netflix.movies);
   const genres = useSelector((state) => state.netflix.genres);
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
+  const { userID, setUserID } = useContext(UserIDContext);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,10 +34,13 @@ function MoviePage() {
 
   const [user, setUser] = useState(undefined);
 
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    if (currentUser) setUser(currentUser.uid);
-    else navigate("/login");
-  });
+  useEffect(() => {
+    console.log("User ID: " + userID);
+    if (userID === null) {
+      navigate("/login");
+    }
+  }, [userID, navigate]); 
+
 
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);

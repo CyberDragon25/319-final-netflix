@@ -2,14 +2,17 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import BackgroundImage from "../components/BackgroundImage";
 import Header from "../components/Header";
 import { firebaseAuth } from "../utils/firebase-config";
+import UserIDContext from "../components/UserIDContext";
+
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
+  const { userID, setUserID } = useContext(UserIDContext);
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -19,15 +22,36 @@ function Signup() {
   const handleSignIn = async () => {
     try {
       const { email, password } = formValues;
-      await createUserWithEmailAndPassword(firebaseAuth, email, password);
+      const response = await fetch("http://localhost:8081/users/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (response.ok) {
+        setUserID(null);
+        const data = await response.json();
+        const returnUserId = data.id;
+        setUserID(returnUserId);
+        console.log("User ID:", userID);
+        console.log("Return user id:", userID);
+      } else {
+        console.log("User add failed:", response.statusText);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
     }
   };
 
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    if (currentUser) navigate("/");
-  });
+  useEffect(() => {
+    if (userID !== null)
+    {
+    console.log("this should be running");
+      navigate("/");
+    }
+  }, [userID]);
 
   return (
     <Container showPassword={showPassword}>

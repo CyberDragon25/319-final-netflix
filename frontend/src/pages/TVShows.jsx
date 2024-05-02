@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext  } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import CardSlider from "../components/CardSlider";
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchMovies, getGenres } from "../store";
 import SelectGenre from "../components/SelectGenre";
 import Slider from "../components/Slider";
+import UserIDContext from "../components/UserIDContext";
 
 function TVShows() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,6 +17,7 @@ function TVShows() {
   const genres = useSelector((state) => state.netflix.genres);
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
   const dataLoading = useSelector((state) => state.netflix.dataLoading);
+  const { userID, setUserID } = useContext(UserIDContext);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,10 +34,13 @@ function TVShows() {
 
   const [user, setUser] = useState(undefined);
 
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    if (currentUser) setUser(currentUser.uid);
-    else navigate("/login");
-  });
+
+  useEffect(() => {
+    console.log("User ID: " + userID);
+    if (userID === null) {
+      navigate("/login");
+    }
+  }, [userID, navigate]); 
 
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
