@@ -38,6 +38,26 @@ app.post("/users/add", async (req, res) => {
     }
 });
 
+app.get("/users/:id", async (req, res) => {
+    const userId = req.params.id;
+    console.log(req.params.id);
+    try {
+        await client.connect();
+        const user = await client.db(dbName).collection("users").findOne({ "_id": new ObjectId(userId) });
+
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ error: "User not found" });
+        }
+    } catch (error) {
+        console.error("An error occurred:", error);
+        res.status(500).json({ error: "An internal server error occurred" });
+    } finally {
+        await client.close();
+    }
+});
+
 app.delete("/users/delete/:id", async (req, res) => {
     try {
         const id = new ObjectId(req.params.id);
