@@ -26,7 +26,9 @@ app.post("/users/add", async (req, res) => {
         const newDocument = {
             "_id": new ObjectId(),
             "email": req.body.email,
-            "password": req.body.password
+            "password": req.body.password,
+            "favorites": []
+
         };
         const results = await client.db(dbName).collection("users").insertOne(newDocument);
         res.status(200).send(results);
@@ -57,6 +59,68 @@ app.get("/users/:id", async (req, res) => {
         await client.close();
     }
 });
+
+app.get('/users/favorites/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+      await client.connect();
+      const user = await client.db(dbName).collection('users').findOne({ "_id": new ObjectId(userId) });
+      if (!user) {
+        return res.status(404).send({ error: 'User not found' });
+      }
+      const favorites = user.favorites || [];
+      res.status(200).send({ favorites });
+    } catch (error) {
+      console.error('An error occurred:', error);
+      res.status(500).send({ error: 'An internal server error occurred' });
+    } finally {
+      await client.close();
+    }
+  });
+
+  app.post('/users/favoritesAdd/:id/', async (req, res) => {
+    const userId = req.params.id;
+    const movieId  = req.body.movieId;
+    console.log("Favorite ID: " + movieId);
+    console.log("Body: " + req.body.movieId);
+
+    try {
+      await client.connect();
+      const result = await client.db(dbName).collection('users').updateOne(
+        { "_id": new ObjectId(userId) },
+        { $addToSet: { favorites: movieId } }
+      );
+      res.status(200).send({ message: 'Favorite added successfully' });
+    } catch (error) {
+      console.error('An error occurred:', error);
+      res.status(500).send({ error: 'An internal server error occurred' });
+    } finally {
+      await client.close();
+    }
+  });
+
+  app.post('/users/removeFavorite/:id/', async (req, res) => {
+    const userId = req.params.id;
+    const movieId  = req.body.movieId;
+  
+    try {
+      await client.connect();
+      const result = await client.db(dbName).collection('users').updateOne(
+        { "_id": new ObjectId(userId) },
+        { $pull: { favorites: movieId } } 
+      );
+      if (result.modifiedCount === 0) {
+        res.status(404).send({ error: 'Favorite not found' });
+      } else {
+        res.status(200).send({ message: 'Favorite removed successfully' });
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      res.status(500).send({ error: 'An internal server error occurred' });
+    } finally {
+      await client.close();
+    }
+  });
 
 app.delete("/users/delete/:id", async (req, res) => {
     try {

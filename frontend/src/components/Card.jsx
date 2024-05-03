@@ -20,6 +20,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
   const [email, setEmail] = useState(undefined);
   const { userID, setUserID } = useContext(UserIDContext);
+  const [isLikedCurrent, setIsLikedCurrent] = useState(isLiked);
 
   useEffect(() => {
     if (userID === null) {
@@ -28,16 +29,47 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
   }, [userID, navigate]); 
 
 
-  const addToList = async () => {
+  const addToList = async (movieId) => {
     try {
-      await axios.post("http://localhost:5000/api/user/add", {
-        email,
-        data: movieData,
+      console.log("Movie ID: " + movieId);
+      const response = await fetch(`http://localhost:8081/users/favoritesAdd/${userID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ movieId }), 
       });
+      if (response.ok) {
+        setIsLikedCurrent(true)
+      } else {
+        console.log("User add failed:", response.statusText);
+
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
     }
   };
+
+  const removeFromList = async (movieId) => {
+    try {
+      const response = await fetch(`http://localhost:8081/users/removeFavorite/${userID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ movieId }), 
+      });
+      if (response.ok) {
+        setIsLikedCurrent(false)
+      } else {
+        console.log("User remove failed:", response.statusText);
+
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
 
   return (
     <Container
@@ -49,6 +81,8 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
         alt="card"
         onClick={() => navigate("/player")}
       />
+
+
 
       {isHovered && (
         <div className="hover">
@@ -68,7 +102,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
           </div>
           <div className="info-container flex column">
             <h3 className="name" onClick={() => navigate("/player")}>
-              {movieData.name}
+              {movieData.id}
             </h3>
             <div className="icons flex j-between">
               <div className="controls flex">
@@ -76,23 +110,13 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
                   title="Play"
                   onClick={() => navigate("/player")}
                 />
-                <RiThumbUpFill title="Like" />
-                <RiThumbDownFill title="Dislike" />
-                {isLiked ? (
-                  <BsCheck
-                    title="Remove from List"
-                    onClick={() =>
-                      dispatch(
-                        removeMovieFromLiked({ movieId: movieData.id, email })
-                      )
-                    }
-                  />
-                ) : (
-                  <AiOutlinePlus title="Add to my list" onClick={addToList} />
+                {isLikedCurrent ? (
+                  <BsCheck title="Remove from List" onClick={() =>removeFromList(movieData.id)} />
+                    ) 
+                    : 
+                    (
+                      <AiOutlinePlus title="Add to my list" onClick={() => addToList(movieData.id)} />
                 )}
-              </div>
-              <div className="info">
-                <BiChevronDown title="More Info" />
               </div>
             </div>
             <div className="genres flex">
