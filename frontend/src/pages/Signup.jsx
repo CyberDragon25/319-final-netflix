@@ -49,7 +49,7 @@ function Signup() {
   useEffect(() => {
     if (userID !== null)
     {
-      navigate("/");
+      navigate("/tv");
     }
   }, [userID]);
 

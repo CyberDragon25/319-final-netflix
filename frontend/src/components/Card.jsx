@@ -53,7 +53,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
   const removeFromList = async (movieId) => {
     try {
       const response = await fetch(`http://localhost:8081/users/removeFavorite/${userID}`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },

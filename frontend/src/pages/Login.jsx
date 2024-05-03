@@ -41,7 +41,7 @@ function Login() {
     if (userID !== null)
     {
     console.log("this should be running");
-      navigate("/");
+      navigate("/tv");
     }
   }, [userID]);
 
