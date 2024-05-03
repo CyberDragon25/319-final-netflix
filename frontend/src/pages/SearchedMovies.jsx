@@ -43,7 +43,7 @@ export default function SearchedMovies() {
               movieData={movie}
               index={index}
               key={movie.id}
-              isLiked={true}
+              isLiked={false}
             />
           ))}
         </div>
