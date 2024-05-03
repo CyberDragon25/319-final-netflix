@@ -11,10 +11,10 @@ export default function Slider({movies}) {
         <div> 
             <CardSlider title="Trending Now" data={getMoviesFromRange(0,10)}/>
             <CardSlider title="New Releases" data={getMoviesFromRange(10,20)}/>
-            <CardSlider title="Blockbuster Movies" data={getMoviesFromRange(20,30)}/>
+            <CardSlider title="Family" data={getMoviesFromRange(20,30)}/>
             <CardSlider title="Popular Right Now" data={getMoviesFromRange(30,40)}/>
             <CardSlider title="Action Movies" data={getMoviesFromRange(40,50)}/>
-            <CardSlider title="Epics" data={getMoviesFromRange(50,60)}/>
+            <CardSlider title="Adeventure Movies" data={getMoviesFromRange(50,60)}/>
         </div>
     )
 };
