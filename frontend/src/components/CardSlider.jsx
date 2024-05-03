@@ -1,12 +1,49 @@
-import React, { useRef, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import Card from "./Card";
+import UserIDContext from "./UserIDContext";
 
 export default React.memo(function CardSlider({ data, title }) {
   const listRef = useRef();
   const [sliderPosition, setSliderPosition] = useState(0);
   const [showControls, setShowControls] = useState(false);
+  const { userID, setUserID } = useContext(UserIDContext);
+  const [userFavorites, setUserFavorites] = useState({});
+
+  const fetchUserFavorites = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/users/favorites/${userID}`);
+      if (response.status === 200) {
+        const favorites = response.data.favorites;
+        const favoritesMap = {};
+        favorites.forEach((favorite) => {
+          favoritesMap[favorite] = favorite;
+        });
+        setUserFavorites(favoritesMap);
+        return favoritesMap;
+      } else {
+        throw new Error('Failed to fetch user favorites');
+      }
+    } catch (error) {
+      console.error('Error fetching user favorites:', error);
+      return {};
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const favoritesMap = await fetchUserFavorites();
+      } catch (error) {
+        console.error('Error fetching user favorites:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleDirection = (direction) => {
     let distance = listRef.current.getBoundingClientRect().x - 70;
     if (direction === "left" && sliderPosition > 0) {
@@ -37,7 +74,7 @@ export default React.memo(function CardSlider({ data, title }) {
         </div>
         <div className="slider flex" ref={listRef}>
           {data.map((movie, index) => {
-            return <Card movieData={movie} index={index} key={movie.id} />;
+            return <Card movieData={movie} index={index} key={movie.id} isLiked={movie.id in userFavorites} />;
           })}
         </div>
         <div
@@ -51,6 +88,7 @@ export default React.memo(function CardSlider({ data, title }) {
     </Container>
   );
 });
+
 const Container = styled.div`
   gap: 1rem;
   position: relative;
