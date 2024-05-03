@@ -34,7 +34,12 @@ function About() {
             </div>
             <div className="info">
               <p>
-                Text about our project
+              In an era where streaming platforms have revolutionized the entertainment industry, our
+              final project aims to emulate the success of one of the most iconic platforms - Netflix.
+              The motivation behind our Netflix clone project stems from the recognition of the
+              significant impact streaming services have had on how we consume media. By creating a replica of
+              Netflix, we endeavor to delve into the intricacies of modern web development, while also
+              providing users with an immersive streaming experience akin to the original platform.
               </p>
             </div>
             <div className="author-info">
@@ -111,12 +116,16 @@ const Container = styled.div`
   
   .author-info {
     color: white;
-    border-top: 1px solid #ffffff80;
+    border-top: 1px #ffffff80;
     padding-top: 1rem;
   }
 
   h4 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    margin-top: 10rem;
   }
 
   ul {

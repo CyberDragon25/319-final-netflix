@@ -53,8 +53,29 @@ export default function Navbar({ isScrolled }) {
             })}
           </ul>
         </div>
-        <div className="right flex a-center">
-        
+          <div className="right flex a-center">
+          <div className={`search ${showSearch ? "show-search" : ""}`}>
+            <button
+              onFocus={() => setShowSearch(true)}
+              onBlur={() => {
+                if (!inputHover) {
+                  setShowSearch(false);
+                }
+              }}
+            >
+              <FaSearch />
+            </button>
+            <input
+              type="text"
+              placeholder="Search"
+              onMouseEnter={() => setInputHover(true)}
+              onMouseLeave={() => setInputHover(false)}
+              onBlur={() => {
+                setShowSearch(false);
+                setInputHover(false);
+              }}
+            />
+          </div>
           <button onClick={signOut}>Sign Out
             <FaPowerOff />
           </button>
