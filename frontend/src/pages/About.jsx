@@ -15,19 +15,18 @@ import Navbar from "../components/Navbar";
 // • The App must contain one view with the information of the Company if the project was
 // developed for a real Company or Institution
 
+function About() {
+  const [isscrolled, setIsscrolled] = useState(false);
 
-  function About() {
-    const [isscrolled, setIsscrolled] = useState(false);
+  window.onscroll = () => {
+    setIsscrolled(window.scrollY === 0 ? false : true);
+    return () => (window.onscroll = null);
+  };
 
-    window.onscroll = () => {
-        setIsscrolled(window.scrollY === 0 ? false : true);
-        return () => (window.onscroll = null);
-      };
-
-      return (
-        <Container>
-            <Navbar isscrolled={isscrolled} />
-            <div className="content">
+  return (
+    <Container>
+      <Navbar isscrolled={isscrolled} />
+      <div className="content">
         <div className="about-container">
           <div className="about">
             <div className="title">
@@ -51,11 +50,22 @@ import Navbar from "../components/Navbar";
               </ul>
             </div>
           </div>
+          <div className="course-info">
+            <h4>Course Information</h4>
+            <p>Name of the course: SE/ComS319 Construction of User Interfaces, Spring 2024</p>
+            <p>Date: {new Date().toLocaleDateString()}</p> <br /> <br />
+            <p>
+              <strong>Instructors:</strong>
+              <ul>
+                <li>Dr. Abraham N. Aldaco Gastelum - Email: aaldaco@iastate.edu</li>
+                <li>Dr. Ali Jannesari - Email: jannesar@iastate.edu</li>
+              </ul>
+            </p>
+          </div>
         </div>
       </div>
-        </Container>
-    );
-      
+    </Container>
+  );
 }
 
 const Container = styled.div`
