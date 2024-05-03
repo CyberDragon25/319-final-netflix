@@ -33,7 +33,8 @@ function Signup() {
       if (response.ok) {
         setUserID(null);
         const data = await response.json();
-        const returnUserId = data.id;
+        console.log(data.insertedId);
+        const returnUserId = data.insertedId;
         setUserID(returnUserId);
         console.log("User ID:", userID);
         console.log("Return user id:", userID);
@@ -48,7 +49,6 @@ function Signup() {
   useEffect(() => {
     if (userID !== null)
     {
-    console.log("this should be running");
       navigate("/");
     }
   }, [userID]);

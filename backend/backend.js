@@ -22,16 +22,19 @@ app.listen(port, () => {
 
 app.post("/users/add", async (req, res) => {
     try {
+      console.log("ITS GETTING THIS FAR " + 1);
         await client.connect();
+        console.log("ITS GETTING THIS FAR " + 2);
         const newDocument = {
-            "_id": new ObjectId(),
             "email": req.body.email,
             "password": req.body.password,
             "favorites": []
-
         };
+        console.log("ITS GETTING THIS FAR " + 3);
         const results = await client.db(dbName).collection("users").insertOne(newDocument);
+        console.log("ITS GETTING THIS FAR " + 4);
         res.status(200).send(results);
+        console.log("ITS GETTING THIS FAR " + 5);
     } catch (error) {
         console.error("An error occurred:", error);
         res.status(500).send({ error: 'An internal server error occurred' });
@@ -42,6 +45,7 @@ app.post("/users/add", async (req, res) => {
 
 app.get("/users/:id", async (req, res) => {
     const userId = req.params.id;
+    console.log("BACKEND USER ID: " + userId);
     console.log(req.params.id);
     try {
         await client.connect();

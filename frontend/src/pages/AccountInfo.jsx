@@ -65,6 +65,7 @@ function UserAccountPage() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        console.log(userID);
         const response = await fetch(`http://localhost:8081/users/${userID}`);
         if (!response.ok) {
           throw new Error("Failed to fetch user information");
