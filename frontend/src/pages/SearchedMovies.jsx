@@ -21,7 +21,6 @@ export default function SearchedMovies() {
   const [email, setEmail] = useState(undefined);
   const { userID, setUserID } = useContext(UserIDContext);
   const { userSearch, setUserSearch } = useContext(UserIDContext);
-  const [filteredMovies, setFilteredMovies] = useState([]);
   const [selectedButton, setSelectedButton] = useState("movies");
 
   useEffect(() => {
@@ -29,6 +28,9 @@ export default function SearchedMovies() {
       navigate("/login");
     }
   }, [userID, navigate]);
+
+  const regexPattern = new RegExp(userSearch, "i");
+  const filteredMovies = movies.filter(item => regexPattern.test(item.name));
 
   return (
     <Container>
@@ -41,7 +43,7 @@ export default function SearchedMovies() {
               movieData={movie}
               index={index}
               key={movie.id}
-              isLiked={true}
+              isLiked={false}
             />
           ))}
         </div>
