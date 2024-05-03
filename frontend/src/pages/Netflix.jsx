@@ -22,10 +22,11 @@ export default function Netflix() {
 
   useEffect(() => {
     dispatch(getGenres());
+    dispatch(fetchMovies({type: "tv"}));
   },[]);
 
   useEffect(() => {
-    if(genresLoaded) dispatch(fetchMovies({type: "all"}));
+    if(genresLoaded) dispatch(fetchMovies({type: "movie"}));
   })
 
   window.onscroll = () => {

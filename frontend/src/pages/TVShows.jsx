@@ -22,6 +22,7 @@ function TVShows() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     if (!genres.length) dispatch(getGenres());
   }, []);
