@@ -102,7 +102,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
           </div>
           <div className="info-container flex column">
             <h3 className="name" onClick={() => navigate("/player")}>
-              {movieData.id}
+              {movieData.name}
             </h3>
             <div className="icons flex j-between">
               <div className="controls flex">

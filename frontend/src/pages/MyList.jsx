@@ -68,6 +68,10 @@ export default function MyList() {
     dispatch(fetchMovies({ type: "tv" }));
   };
 
+  useEffect(() => {
+    dispatch(fetchMovies({ type: "movie" }));
+  },[]);
+
   return (
     <Container>
       <Navbar isScrolled={isScrolled} />
