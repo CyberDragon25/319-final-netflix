@@ -81,6 +81,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
         alt="card"
         onClick={() => navigate("/player")}
       />
+      <div className="movie-name">{movieData.name}</div>
 
 
 
@@ -144,6 +145,18 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     z-index: 10;
+  }
+.movie-name {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    z-index: 20;
   }
   .hover {
     z-index: 99;
